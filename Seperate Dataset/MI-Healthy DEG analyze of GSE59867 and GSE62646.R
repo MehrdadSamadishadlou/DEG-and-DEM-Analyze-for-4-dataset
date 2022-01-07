@@ -81,15 +81,25 @@ tT <- cbind(sym,tT[,-1])
 write.csv(tT, "Results/Seperate Datasets/GSE62646/MI(GSE62646)-Healthy_statistical-data.csv", row.names=F, quote = F)
 
 MI.up <- subset(tT, logFC>1 & adj.P.Val<0.05)
-write.csv(MI.up, file="Results/Seperate Datasets/GSE62646/MI(GSE62646)_upper.csv", quote = F, row.names = F, col.names = F)
 
 Normal.up <- subset(tT, logFC < -1 & adj.P.Val<0.05)
-write.csv(Normal.up, file="Results/Seperate Datasets/GSE62646/Normal_upper(GSE62646).csv", quote = F, row.names = F, col.names = F)
 
 DEGs <- rbind(MI.up,Normal.up)
+
+#MI.up <- read.csv("Results/Seperate Datasets/GSE62646/MI(GSE62646)_upper.csv", header = TRUE, check.names = FALSE)
+#Normal.up <- read.csv("Results/Seperate Datasets/GSE62646/Normal_upper(GSE62646).csv", header = TRUE, check.names = FALSE)
+#DEGs <- read.csv("Results/Seperate Datasets/GSE62646/DEGs(GSE62646).csv", header = TRUE, check.names = FALSE)
+
+#### Deleting Control probes
+
+MI.up <- MI.up[MI.up$address != "Control",]
+Normal.up <- Normal.up[Normal.up$address != "Control",]
+DEGs <- DEGs[DEGs$address != "Control",]
+
+
+write.csv(MI.up, file="Results/Seperate Datasets/GSE62646/MI(GSE62646)_upper.csv", quote = F, row.names = F, col.names = F)
+write.csv(Normal.up, file="Results/Seperate Datasets/GSE62646/Normal_upper(GSE62646).csv", quote = F, row.names = F, col.names = F)
 write.csv(DEGs, file="Results/Seperate Datasets/GSE62646/DEGs(GSE62646).csv", quote = F, row.names = F, col.names = F)
-
-
 
 ################################## GSE59867 ##############################
 
@@ -159,10 +169,24 @@ tT <- cbind(sym,tT[,-1])
 write.csv(tT, "Results/Seperate Datasets/GSE59867/MI(GSE59867)-Healthy_statistical-data.csv", row.names=F, quote = F)
 
 MI.up <- subset(tT, logFC>1 & adj.P.Val<0.05)
-write.csv(MI.up, file="Results/Seperate Datasets/GSE59867/MI(GSE59867)_upper.csv", quote = F, row.names = F, col.names = F)
 
 Normal.up <- subset(tT, logFC < -1 & adj.P.Val<0.05)
-write.csv(Normal.up, file="Results/Seperate Datasets/GSE59867/Normal_upper(GSE59867).csv", quote = F, row.names = F, col.names = F)
 
 DEGs <- rbind(MI.up,Normal.up)
+
+
+
+#MI.up <- read.csv("Results/Seperate Datasets/GSE59867/MI(GSE59867)_upper.csv", header = TRUE, check.names = FALSE)
+#Normal.up <- read.csv("Results/Seperate Datasets/GSE59867/Normal_upper(GSE59867).csv", header = TRUE, check.names = FALSE)
+#DEGs <- read.csv("Results/Seperate Datasets/GSE59867/DEGs(GSE59867).csv", header = TRUE, check.names = FALSE)
+
+#### Deleting Control probes
+
+MI.up <- MI.up[MI.up$address != "Control",]
+Normal.up <- Normal.up[Normal.up$address != "Control",]
+DEGs <- DEGs[DEGs$address != "Control",]
+
+
+write.csv(MI.up, file="Results/Seperate Datasets/GSE59867/MI(GSE59867)_upper.csv", quote = F, row.names = F, col.names = F)
+write.csv(Normal.up, file="Results/Seperate Datasets/GSE59867/Normal_upper(GSE59867).csv", quote = F, row.names = F, col.names = F)
 write.csv(DEGs, file="Results/Seperate Datasets/GSE59867/DEGs(GSE59867).csv", quote = F, row.names = F, col.names = F)

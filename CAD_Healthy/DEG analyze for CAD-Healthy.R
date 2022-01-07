@@ -75,17 +75,15 @@ tT <- cbind(sym,tT[,-1])
 write.csv(tT, "Results/CAD-Healthy/CAD-Healthy_statistical-data.csv", row.names=F, quote = F)
 
 CAD.up <- subset(tT, logFC>1 & adj.P.Val<0.05)
-write.csv(MI.up, file="Results/CAD-Healthy/CAD_upper.csv", quote = F, row.names = F, col.names = F)
 
 Normal.up <- subset(tT, logFC < -1 & adj.P.Val<0.05)
-write.csv(Normal.up, file="Results/CAD-Healthy/Normal_upper.csv", quote = F, row.names = F, col.names = F)
 
 DEGs <- rbind(MI.up,Normal.up)
-write.csv(DEGs, file="Results/CAD-Healthy/DEGs.csv", quote = F, row.names = F, col.names = F)
 
-#MI.up <- read.csv("Results/MI_upper.csv", header = TRUE, check.names = FALSE)
-#Normal.up <- read.csv("Results/Normal_upper.csv", header = TRUE, check.names = FALSE)
-#DEGs <- read.csv("Results/DEGs.csv", header = TRUE, check.names = FALSE)
+
+CAD.up <- read.csv("Results//CAD-Healthy/CAD_upper.csv", header = TRUE, check.names = FALSE)
+Normal.up <- read.csv("Results//CAD-Healthy/Normal_upperthan_CAD.csv", header = TRUE, check.names = FALSE)
+DEGs <- read.csv("Results//CAD-Healthy/DEGs_CAD_Healthy.csv", header = TRUE, check.names = FALSE)
 
 
 ##### Looking for control probes in DEGs
@@ -96,3 +94,13 @@ sum(Normal.up$address == "Control") #459
 
 sum(DEGs$address == "Control") #1072
 
+#### Deleting Control probes
+
+CAD.up <- CAD.up[CAD.up$address != "Control",]
+Normal.up <- Normal.up[Normal.up$address != "Control",]
+DEGs <- DEGs[DEGs$address != "Control",]
+
+
+write.csv(MI.up, file="Results/CAD-Healthy/CAD_upper.csv", quote = F, row.names = F, col.names = F)
+write.csv(Normal.up, file="Results/CAD-Healthy/Normal_upper_CAD.csv", quote = F, row.names = F, col.names = F)
+write.csv(DEGs, file="Results/CAD-Healthy/DEGs_CAD.csv", quote = F, row.names = F, col.names = F)

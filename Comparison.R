@@ -5,12 +5,10 @@ library(pheatmap)
 library(ggplot2)
 library(gplots)
 
+############################### Venn Diagram for MI_Healthy and CAD-Healthy DEGs ############################
+
 MI_Healthy <- read.csv("Results/MI-Healthy/DEGs.csv", header = TRUE, check.names = FALSE)
-CAD_Healthy <- read.csv("Results/CAD-Healthy/DEGs_CAD_Healthy.csv", header = TRUE, check.names = FALSE)
-MI_Healthy_GSE62646 <- read.csv("Results/Seperate Datasets/GSE62646/DEGs(GSE62646).csv", header = TRUE, check.names = FALSE)
-MI_Healthy_GSE59867 <- read.csv("Results/Seperate Datasets/GSE59867/DEGs(GSE59867).csv", header = TRUE, check.names = FALSE)
-
-
+CAD_Healthy <- read.csv("Results/CAD-Healthy/DEGs_CAD.csv", header = TRUE, check.names = FALSE)
 
 probes <- list(MI_Healthy$ID, CAD_Healthy$ID)
 
@@ -19,21 +17,36 @@ ggVennDiagram(probes, category.names = c("STEMI", "stable CAD")) +
   scale_fill_gradient(low = "#F4FAFE", high = "#4981BF")
 dev.off()
 
+############################### Venn Diagram for MI_Healthy Meta with single datasets ############################
 
-probes <- list(MI_Healthy$ID, MI_Healthy_GSE62646$ID)
 
-pdf("Results/Comparison/DEGs in MI-Healthy Tow Datasets and GSE62646.pdf", width = 8, height = 6)
-ggVennDiagram(probes, category.names = c("STEMI (Two Datasets)", "STEMI GSE62646 Dataset")) + 
+MI_Healthy_GSE62646 <- read.csv("Results/Seperate Datasets/GSE62646/DEGs(GSE62646).csv", header = TRUE, check.names = FALSE)
+MI_Healthy_GSE59867 <- read.csv("Results/Seperate Datasets/GSE59867/DEGs(GSE59867).csv", header = TRUE, check.names = FALSE)
+
+
+
+probes <- list(MI_Healthy$ID, MI_Healthy_GSE59867$ID, MI_Healthy_GSE62646$ID)
+
+pdf("Results/Comparison/DEGs in MI-Healthy meta-single.pdf", width = 8, height = 6)
+ggVennDiagram(probes, category.names = c("Meta Analyze", "GSE59867", "GSE62646")) + 
+  scale_fill_gradient(low = "#F4FAFE", high = "#4981BF")
+dev.off()
+
+############################### Venn Diagram for CAD_Healthy Meta with single datasets ############################
+
+CAD_Healthy_GSE62646 <- read.csv("Results/Seperate Datasets/GSE62646/CAD_Healthy/DEGs(GSE62646).csv", header = TRUE, check.names = FALSE)
+CAD_Healthy_GSE59867 <- read.csv("Results/Seperate Datasets/GSE59867/CAD_Healthy/DEGs(GSE59867).csv", header = TRUE, check.names = FALSE)
+
+
+probes <- list(CAD_Healthy$ID, CAD_Healthy_GSE59867$ID, CAD_Healthy_GSE62646$ID)
+
+pdf("Results/Comparison/DEGs in CAD-Healthy meta-single.pdf", width = 8, height = 6)
+ggVennDiagram(probes, category.names = c("Meta Analyze", "GSE59867", "GSE62646")) + 
   scale_fill_gradient(low = "#F4FAFE", high = "#4981BF")
 dev.off()
 
 
-probes <- list(MI_Healthy$ID, MI_Healthy_GSE59867$ID)
 
-pdf("Results/Comparison/DEGs in MI-Healthy Tow Datasets and GSE59867.pdf", width = 8, height = 6)
-ggVennDiagram(probes, category.names = c("STEMI (Two Datasets)", "STEMI GSE59867 Dataset")) + 
-  scale_fill_gradient(low = "#F4FAFE", high = "#4981BF")
-dev.off()
 
 
 ########### Heatmap ############
