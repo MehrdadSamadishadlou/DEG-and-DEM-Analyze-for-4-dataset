@@ -6,6 +6,7 @@ library(pheatmap)
 library(ggplot2)
 library(limma)
 library(gplots)
+library(stringr)
 
 
 superset <- readRDS('Super4set.Rds')
@@ -83,7 +84,7 @@ DEGs <- rbind(MI.up,Normal.up)
 
 #MI.up <- read.csv("Results/MI-Healthy/MI_upper.csv", header = TRUE, check.names = FALSE)
 #Normal.up <- read.csv("Results//MI-Healthy/Normal_upper.csv", header = TRUE, check.names = FALSE)
-#DEGs <- read.csv("Results//MI-Healthy/DEGs.csv", header = TRUE, check.names = FALSE)
+DEGs <- read.csv("Results//MI-Healthy/DEGs.csv", header = TRUE, check.names = FALSE)
 
 
 ##### Looking for control probes in DEGs
@@ -103,3 +104,15 @@ DEGs <- DEGs[DEGs$address != "Control",]
 write.csv(MI.up, file="Results/MI-Healthy/MI_upper.csv", quote = F, row.names = F, col.names = F)
 write.csv(Normal.up, file="Results/MI-Healthy/Normal_upper.csv", quote = F, row.names = F, col.names = F)
 write.csv(DEGs, file="Results/MI-Healthy/DEGs.csv", quote = F, row.names = F, col.names = F)
+
+
+#### Extracting miRs ######
+
+data1 <- DEGs[str_detect(DEGs$`By Chr`, "MIR"), ]
+data2 <- DEGs[str_detect(DEGs$`By ID`, "MIR"), ]
+data3 <- DEGs[str_detect(DEGs$`By Platform`, "MIR"), ]
+mirs <- rbind(data1, data2, data3)
+mirs <- mirs[!duplicated(mirs$ID),]
+mirs <- mirs[-2,]
+
+write.csv(mirs, file="Results/MI-Healthy/MIRS in MI DEGs.csv", quote = F, row.names = F, col.names = F)

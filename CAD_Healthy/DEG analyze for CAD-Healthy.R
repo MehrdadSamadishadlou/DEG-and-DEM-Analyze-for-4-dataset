@@ -81,9 +81,9 @@ Normal.up <- subset(tT, logFC < -1 & adj.P.Val<0.05)
 DEGs <- rbind(MI.up,Normal.up)
 
 
-CAD.up <- read.csv("Results//CAD-Healthy/CAD_upper.csv", header = TRUE, check.names = FALSE)
-Normal.up <- read.csv("Results//CAD-Healthy/Normal_upperthan_CAD.csv", header = TRUE, check.names = FALSE)
-DEGs <- read.csv("Results//CAD-Healthy/DEGs_CAD_Healthy.csv", header = TRUE, check.names = FALSE)
+#CAD.up <- read.csv("Results//CAD-Healthy/CAD_upper.csv", header = TRUE, check.names = FALSE)
+#Normal.up <- read.csv("Results//CAD-Healthy/Normal_upperthan_CAD.csv", header = TRUE, check.names = FALSE)
+#DEGs <- read.csv("Results//CAD-Healthy/DEGs_CAD.csv", header = TRUE, check.names = FALSE)
 
 
 ##### Looking for control probes in DEGs
@@ -104,3 +104,14 @@ DEGs <- DEGs[DEGs$address != "Control",]
 write.csv(MI.up, file="Results/CAD-Healthy/CAD_upper.csv", quote = F, row.names = F, col.names = F)
 write.csv(Normal.up, file="Results/CAD-Healthy/Normal_upper_CAD.csv", quote = F, row.names = F, col.names = F)
 write.csv(DEGs, file="Results/CAD-Healthy/DEGs_CAD.csv", quote = F, row.names = F, col.names = F)
+
+#### Extracting miRs ######
+
+data1 <- DEGs[str_detect(DEGs$`By Chr`, "MIR"), ]
+data2 <- DEGs[str_detect(DEGs$`By ID`, "MIR"), ]
+data3 <- DEGs[str_detect(DEGs$`By Platform`, "MIR"), ]
+mirs <- rbind(data1, data2, data3)
+mirs <- mirs[!duplicated(mirs$ID),]
+mirs <- mirs[-1,]
+
+write.csv(mirs, file="Results/CAD-Healthy/MIRS in CAD DEGs.csv", quote = F, row.names = F, col.names = F)
