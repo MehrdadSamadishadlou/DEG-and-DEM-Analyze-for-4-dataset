@@ -116,3 +116,20 @@ mirs <- mirs[!duplicated(mirs$ID),]
 mirs <- mirs[-2,]
 
 write.csv(mirs, file="Results/MI-Healthy/MIRS in MI DEGs.csv", quote = F, row.names = F, col.names = F)
+
+########### Extracting mirs in platform column expression #################
+
+expression <- read.csv("Results/MI-Healthy/UltimateDataset.csv", header = TRUE, check.names = FALSE)
+DEGs <- read.csv("Results/MI-Healthy/DEGs.csv", header = TRUE, check.names = FALSE)
+mirs <- DEGs[str_detect(DEGs$`By Platform`, "MIR"), ]
+mirs <- mirs[!duplicated(mirs$ID),]
+mirs <- mirs[-1,]
+
+
+DEMsExpression <- expression[expression$ID %in% mirs$ID,]
+DEMsExpression <- DEMsExpression[,-3:-6]
+DEMsExpression <- t(DEMsExpression)
+names <- paste(DEMsExpression[1,],"/", DEMsExpression[2,])
+colnames(DEMsExpression) <- names
+DEMsExpression <- DEMsExpression[-1:-2,]
+write.csv(DEMsExpression, file = "Results/MI-Healthy/DEMsExpression.csv", quote = F, row.names = T, col.names = F)
