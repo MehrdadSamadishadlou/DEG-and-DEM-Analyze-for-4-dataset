@@ -132,4 +132,5 @@ DEMsExpression <- t(DEMsExpression)
 names <- paste(DEMsExpression[1,],"/", DEMsExpression[2,])
 colnames(DEMsExpression) <- names
 DEMsExpression <- DEMsExpression[-1:-2,]
+DEMsExpression <- DEMsExpression[,c(-6, -8, -9)]
 write.csv(DEMsExpression, file = "Results/MI-Healthy/DEMsExpression.csv", quote = F, row.names = T, col.names = F)

@@ -6,9 +6,11 @@ library(pheatmap)
 library(ggplot2)
 library(limma)
 library(gplots)
+library(stringr)
 
 
-superset <- readRDS('Healthy_CAD_4dataset.Rds')
+
+superset <- readRDS('Datasets/Healthy_CAD_4dataset.Rds')
 exp <- exprs(superset)
 colnames(exp) <- superset@phenoData@data[["geo_accession"]]
 
@@ -115,3 +117,18 @@ mirs <- mirs[!duplicated(mirs$ID),]
 mirs <- mirs[-1,]
 
 write.csv(mirs, file="Results/CAD-Healthy/MIRS in CAD DEGs.csv", quote = F, row.names = F, col.names = F)
+
+
+############## Extracting CAD samples expression profile for DEMs in MI-Healthy ##############
+
+cadexp <- exp[,52:111]
+DEGs <- read.csv("Results/MI-Healthy/DEGs.csv", header = TRUE, check.names = FALSE)
+mirs <- DEGs[str_detect(DEGs$`By Platform`, "MIR"), ]
+mirs <- mirs[!duplicated(mirs$ID),]
+mirs <- mirs[-1,]
+
+cadmirexp <- cadexp[rownames(cadexp) %in% mirs$ID,]
+cadmirexp <- t(cadmirexp)
+colnames(cadmirexp) <- names
+cadmirexp <- cadmirexp[,c(-6, -8, -9)]
+write.csv(cadmirexp, file = "Results/CAD-Healthy/MI-Healthy DEMs Expression of CAD samples.csv", quote = F, row.names = T, col.names = F)
