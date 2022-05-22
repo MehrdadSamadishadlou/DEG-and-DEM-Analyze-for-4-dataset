@@ -288,3 +288,63 @@ ggplot(pcr, aes(PC1 , PC2 , color=Group_M)) + geom_point(size = 7, alpha = 0.5) 
   ggtitle("Samples PCA") +
   scale_color_manual(breaks = levels(as.factor(Group_M)), values = c("red", "blue"))
 dev.off()
+
+
+
+############### All Samples
+all = cbind(Healthy_exp, CAD_exp, MI_exp)
+all_groups= c(Group_H, Group_C, Group_M)
+
+
+###### Before
+
+pdf("Results/BatchEffectCheck/all-euclidean.pdf", width = 35, height = 35)
+pheatmap(cor(all), labels_row = colnames(all), 
+         labels_col = colnames(all), fontsize_row = 10, fontsize_col = 10,
+         color=bluered(256), border_color = NA)
+dev.off()
+
+pdf("Results/BatchEffectCheck/all-spearman.pdf", width = 35, height = 35)
+pheatmap(cor(all, method = "spearman"), labels_row = colnames(all), 
+         labels_col = colnames(all), fontsize_row = 10, fontsize_col = 10,
+         color=bluered(256), border_color = NA)
+dev.off()
+
+
+pc <- prcomp(all)
+pcr <- data.frame(pc$r[, 1:3] , Group = all_groups)
+
+pdf("Results/BatchEffectCheck/all-Samples.pdf", width = 20, height = 13)        
+ggplot(pcr, aes(PC1 , PC2 , color=all_groups)) + geom_point(size = 7, alpha = 0.5) +
+  ggtitle("Samples PCA") +
+  scale_color_manual(breaks = levels(as.factor(all_groups)),
+                     values = c("red", "blue", "green", "black"))
+dev.off()
+
+########## After
+
+all_BFR <- removeBatchEffect(all, all_groups)
+
+
+pdf("Results/BatchEffectCheck/all_BFR-euclidean.pdf", width = 35, height = 35)
+pheatmap(cor(all_BFR), labels_row = colnames(all_BFR), 
+         labels_col = colnames(all_BFR), fontsize_row = 10, fontsize_col = 10,
+         color=bluered(256), border_color = NA)
+dev.off()
+
+pdf("Results/BatchEffectCheck/all_BFR-spearman.pdf", width = 35, height = 35)
+pheatmap(cor(all_BFR, method = "spearman"), labels_row = colnames(all_BFR), 
+         labels_col = colnames(all_BFR), fontsize_row = 10, fontsize_col = 10,
+         color=bluered(256), border_color = NA)
+dev.off()
+
+
+pc <- prcomp(all_BFR)
+pcr <- data.frame(pc$r[, 1:3] , Group = all_groups)
+
+pdf("Results/BatchEffectCheck/all_BFR-Samples.pdf", width = 20, height = 13)        
+ggplot(pcr, aes(PC1 , PC2 , color=all_groups)) + geom_point(size = 7, alpha = 0.5) +
+  ggtitle("Samples PCA") +
+  scale_color_manual(breaks = levels(as.factor(all_groups)),
+                     values = c("red", "blue", "green", "black"))
+dev.off()
